@@ -6,6 +6,20 @@ Super Smash Bros Melee \
 [![Discord Badge]][discord]
 =============
 
+# TECHNICAL TEST DELIVERY - MARCH 2026
+
+> [!IMPORTANT]
+> **Status:** Phase 1 & 2 Completed.
+> **Results:** 2 Functions matched with 1:1 binary parity (Exit Code 0).
+> **Implementation Details:** Detailed methodology and environment resolution in [SOLUTION.md](./SOLUTION.md).
+
+---
+
+## Completed Tasks
+1. **Phase 1:** `mnNameNew_KeySetup` in `src/melee/mn/mnnamene_key.c`
+2. **Phase 2:** `HSD_Memory_InitializePool` in `src/sysdolphin/baselib/hsd_check.c` (High complexity match).
+
+
 [<img src="https://decomp.dev/doldecomp/melee.svg?w=512&h=256" width="512" height="256">][Progress]
 
 [Build Status]: https://github.com/doldecomp/melee/actions/workflows/build.yml/badge.svg
