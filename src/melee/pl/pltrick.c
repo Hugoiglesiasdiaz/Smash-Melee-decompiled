@@ -1,0 +1,77 @@
+#include "pltrick.h"
+
+#include "ft/inlines.h"
+#include "pl/player.h"
+
+#include <sysdolphin/baselib/debug.h>
+
+int pl_80037B2C(struct plActionStats* arg0, int h_player, int idx)
+{
+    HSD_ASSERT(0x89, 0 <= h_player && h_player < 8);
+    if (idx < 0x64) {
+        return arg0->x504[idx] & (1 << (u8) h_player);
+    }
+}
+
+void pl_80037BC0(struct plAttackStats* stats, union Struct2070* ev)
+{
+    stats->total++;
+    stats->by_attack_counts[ev->x2073]++;
+    if (ev->count_thrown_items) {
+        stats->thrown_item_count++;
+    }
+    if (ev->count_aerials) {
+        stats->aerials_count++;
+    }
+    if (ev->count_specials) {
+        stats->specials_count++;
+    }
+    if (ev->count_x1A0) {
+        stats->x1A0_count++;
+    }
+    if (ev->count_x1A4) {
+        stats->x1A4_count++;
+    }
+}
+
+/// #pl_80037C60
+
+void pl_80037DF4(HSD_GObj* gobj, union Struct2070* ev)
+{
+    Fighter* ft = GET_FIGHTER(gobj);
+    union Struct2070 local_ev;
+    plActionStats* acp = Player_GetActionStats(ft->player_id);
+    local_ev = *ev;
+    acp->attacks.total++;
+    acp->attacks.by_attack_counts[local_ev.x2073]++;
+    if (local_ev.count_thrown_items) {
+        acp->attacks.thrown_item_count++;
+    }
+    if (local_ev.count_aerials) {
+        acp->attacks.aerials_count++;
+    }
+    if (local_ev.count_specials) {
+        acp->attacks.specials_count++;
+    }
+    if (local_ev.count_x1A0) {
+        acp->attacks.x1A0_count++;
+    }
+    if (local_ev.count_x1A4) {
+        acp->attacks.x1A4_count++;
+    }
+}
+
+void pl_80037ECC(HSD_GObj* gobj)
+{
+    Fighter* ft = GET_FIGHTER(gobj);
+    plActionStats* acp = Player_GetActionStats(ft->player_id);
+    acp->attacks.x1A8++;
+}
+
+/// #fn_80037F00
+
+/// #pl_80038144
+
+/// #pl_800384DC
+
+/// #pl_80038628

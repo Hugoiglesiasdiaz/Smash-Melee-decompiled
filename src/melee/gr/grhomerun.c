@@ -1,0 +1,535 @@
+#include "grhomerun.h"
+
+#include <platform.h>
+
+#include "baselib/sislib.h"
+#include "cm/camera.h"
+#include "gr/ground.h"
+#include "gr/grzakogenerator.h"
+#include "gr/inlines.h"
+#include "gr/stage.h"
+#include "it/it_26B1.h"
+#include "lb/lb_00B0.h"
+#include "lb/lblanguage.h"
+
+f32 grHr_804D6AD8;
+int grHr_804D6ADC;
+f32 grHr_804D6AE0;
+f32 grHr_804D6AE4;
+static void* grHr_804D6AE8;
+StageCallbacks grHr_803E8140[11] = {
+    { grHomeRun_8021C914, grHomeRun_8021CB10, grHomeRun_8021CB18,
+      grHomeRun_8021CB1C, 0 },
+    { grHomeRun_8021E038, grHomeRun_8021E064, grHomeRun_8021E06C,
+      grHomeRun_8021E070, 0 },
+    { grHomeRun_8021E074, grHomeRun_8021E0CC, grHomeRun_8021E0D4,
+      grHomeRun_8021E18C, 0 },
+    { grHomeRun_8021E4C4, grHomeRun_8021E4F0, grHomeRun_8021E4F8,
+      grHomeRun_8021E4FC, 0 },
+    { grHomeRun_8021DEB4, grHomeRun_8021DEE0, grHomeRun_8021DEE8,
+      grHomeRun_8021DEEC, 0 },
+    { grHomeRun_8021DEF0, grHomeRun_8021DF48, grHomeRun_8021DF50,
+      grHomeRun_8021E008, 0 },
+    { grHomeRun_8021E1BC, grHomeRun_8021E1E8, grHomeRun_8021E1F0,
+      grHomeRun_8021E1F4, 0 },
+    { grHomeRun_8021E1F8, grHomeRun_8021E250, grHomeRun_8021E258,
+      grHomeRun_8021E310, 0 },
+    { grHomeRun_8021E340, grHomeRun_8021E36C, grHomeRun_8021E374,
+      grHomeRun_8021E378, 0 },
+    { grHomeRun_8021E37C, grHomeRun_8021E3D4, grHomeRun_8021E3DC,
+      grHomeRun_8021E494, 0 },
+    { grHomeRun_8021CB20, grHomeRun_8021D678, grHomeRun_8021D680,
+      grHomeRun_8021DEB0, 0xC0000000 },
+};
+
+void grHomeRun_8021C750(bool arg) {}
+
+void grHomeRun_8021C754(void)
+{
+    Vec3 cam_offset;
+
+    grHr_804D6AE8 = Ground_801C49F8();
+    stage_info.unk8C.b4 = false;
+    stage_info.unk8C.b5 = true;
+    grHomeRun_8021EDD4(1);
+    grHomeRun_8021C82C(0);
+    grHomeRun_8021C82C(0xA);
+    grHomeRun_8021ED74();
+    Ground_801C39C0();
+    Ground_801C3BB4();
+    Stage_UnkSetVec3TCam_Offset(&cam_offset);
+    Ground_801C38AC(3.0f * (Stage_GetCamBoundsRightOffset() - cam_offset.x));
+    Ground_801C39B0(3.0f * (Stage_GetBlastZoneRightOffset() - cam_offset.x));
+}
+
+void grHomeRun_8021C7FC(void) {}
+
+void grHomeRun_8021C800(void)
+{
+    grZakoGenerator_801CAE04(0);
+}
+
+bool grHomeRun_8021C824(void)
+{
+    return false;
+}
+
+HSD_GObj* grHomeRun_8021C82C(int gobj_id)
+{
+    HSD_GObj* gobj;
+    StageCallbacks* callbacks = &grHr_803E8140[gobj_id];
+
+    gobj = Ground_GetStageGObj(gobj_id);
+
+    if (gobj != NULL) {
+        Ground_SetupStageCallbacks(gobj, callbacks);
+    } else {
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grhomerun.c", 0x131,
+                 gobj_id);
+    }
+
+    return gobj;
+}
+
+/// #grHomeRun_8021C914
+
+bool grHomeRun_8021CB10(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021CB18(Ground_GObj* arg) {}
+
+void grHomeRun_8021CB1C(Ground_GObj* arg) {}
+
+/// #grHomeRun_8021CB20
+
+bool grHomeRun_8021D678(Ground_GObj* arg)
+{
+    return false;
+}
+
+/// #grHomeRun_8021D680
+
+void grHomeRun_8021DEB0(Ground_GObj* arg) {}
+
+void grHomeRun_8021DEB4(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138((HSD_GObj*) gobj, gp->map_id, 0);
+}
+
+bool grHomeRun_8021DEE0(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021DEE8(Ground_GObj* arg) {}
+
+void grHomeRun_8021DEEC(Ground_GObj* arg) {}
+
+void grHomeRun_8021DEF0(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, 0);
+    gp->gv.unk.xC8 = 0;
+    gp->gv.unk.xCC = (int) Ground_801C3FA4(gobj, 1);
+}
+
+bool grHomeRun_8021DF48(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021DF50(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xCC != 0) {
+        if ((u32) gp->gv.unk.xC8 == 0) {
+            Vec3 pos;
+            f32 scale;
+            f32 y, z;
+            HSD_Text* text;
+
+            gp->gv.unk.xC8 =
+                (int) grHomeRun_8021EC58(gp->gv.homerun.xC6);
+            lb_8000B1CC((HSD_JObj*) gp->gv.unk.xCC, NULL, &pos);
+
+            scale = Ground_801C0498();
+            z = pos.z + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            y = -pos.y + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            text = (HSD_Text*) gp->gv.unk.xC8;
+            text->pos_x =
+                pos.x + (-1.0F) * (grHr_804D6AE4 * scale);
+            text->pos_y = y;
+            text->pos_z = z;
+        }
+    }
+}
+
+void grHomeRun_8021E008(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xC8 != 0) {
+        HSD_SisLib_803A5CC4((HSD_Text*) gp->gv.unk.xC8);
+    }
+}
+
+void grHomeRun_8021E038(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, false);
+}
+
+bool grHomeRun_8021E064(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021E06C(Ground_GObj* arg) {}
+
+void grHomeRun_8021E070(Ground_GObj* arg) {}
+
+void grHomeRun_8021E074(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, 0);
+    gp->gv.unk.xC8 = 0;
+    gp->gv.unk.xCC = (int) Ground_801C3FA4(gobj, 1);
+}
+
+bool grHomeRun_8021E0CC(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021E0D4(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xCC != 0) {
+        if ((u32) gp->gv.unk.xC8 == 0) {
+            Vec3 pos;
+            f32 scale;
+            f32 y, z;
+            HSD_Text* text;
+
+            gp->gv.unk.xC8 =
+                (int) grHomeRun_8021EC58(gp->gv.homerun.xC6);
+            lb_8000B1CC((HSD_JObj*) gp->gv.unk.xCC, NULL, &pos);
+
+            scale = Ground_801C0498();
+            z = pos.z + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            y = -pos.y + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            text = (HSD_Text*) gp->gv.unk.xC8;
+            text->pos_x =
+                pos.x + (-1.0F) * (grHr_804D6AE4 * scale);
+            text->pos_y = y;
+            text->pos_z = z;
+        }
+    }
+}
+
+void grHomeRun_8021E18C(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xC8 != 0) {
+        HSD_SisLib_803A5CC4((HSD_Text*) gp->gv.unk.xC8);
+    }
+}
+
+void grHomeRun_8021E1BC(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, false);
+}
+
+bool grHomeRun_8021E1E8(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021E1F0(Ground_GObj* arg) {}
+
+void grHomeRun_8021E1F4(Ground_GObj* arg) {}
+
+void grHomeRun_8021E1F8(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, 0);
+    gp->gv.unk.xC8 = 0;
+    gp->gv.unk.xCC = (int) Ground_801C3FA4(gobj, 1);
+}
+
+bool grHomeRun_8021E250(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021E258(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xCC != 0) {
+        if ((u32) gp->gv.unk.xC8 == 0) {
+            Vec3 pos;
+            f32 scale;
+            f32 y, z;
+            HSD_Text* text;
+
+            gp->gv.unk.xC8 =
+                (int) grHomeRun_8021EC58(gp->gv.homerun.xC6);
+            lb_8000B1CC((HSD_JObj*) gp->gv.unk.xCC, NULL, &pos);
+
+            scale = Ground_801C0498();
+            z = pos.z + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            y = -pos.y + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            text = (HSD_Text*) gp->gv.unk.xC8;
+            text->pos_x =
+                pos.x + (-1.0F) * (grHr_804D6AE4 * scale);
+            text->pos_y = y;
+            text->pos_z = z;
+        }
+    }
+}
+
+void grHomeRun_8021E310(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xC8 != 0) {
+        HSD_SisLib_803A5CC4((HSD_Text*) gp->gv.unk.xC8);
+    }
+}
+
+void grHomeRun_8021E340(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, false);
+}
+
+bool grHomeRun_8021E36C(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021E374(Ground_GObj* arg) {}
+
+void grHomeRun_8021E378(Ground_GObj* arg) {}
+
+void grHomeRun_8021E37C(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, 0);
+    gp->gv.unk.xC8 = 0;
+    gp->gv.unk.xCC = (int) Ground_801C3FA4(gobj, 1);
+}
+
+bool grHomeRun_8021E3D4(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021E3DC(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xCC != 0) {
+        if ((u32) gp->gv.unk.xC8 == 0) {
+            Vec3 pos;
+            f32 scale;
+            f32 y, z;
+            HSD_Text* text;
+
+            gp->gv.unk.xC8 =
+                (int) grHomeRun_8021EC58(gp->gv.homerun.xC6);
+            lb_8000B1CC((HSD_JObj*) gp->gv.unk.xCC, NULL, &pos);
+
+            scale = Ground_801C0498();
+            z = pos.z + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            y = -pos.y + 0.0F * (grHr_804D6AE4 * scale);
+
+            scale = Ground_801C0498();
+            text = (HSD_Text*) gp->gv.unk.xC8;
+            text->pos_x =
+                pos.x + (-1.0F) * (grHr_804D6AE4 * scale);
+            text->pos_y = y;
+            text->pos_z = z;
+        }
+    }
+}
+
+void grHomeRun_8021E494(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    if ((u32) gp->gv.unk.xC8 != 0) {
+        HSD_SisLib_803A5CC4((HSD_Text*) gp->gv.unk.xC8);
+    }
+}
+
+void grHomeRun_8021E4C4(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138(gobj, gp->map_id, false);
+}
+
+bool grHomeRun_8021E4F0(Ground_GObj* arg)
+{
+    return false;
+}
+
+void grHomeRun_8021E4F8(Ground_GObj* arg) {}
+
+void grHomeRun_8021E4FC(Ground_GObj* arg) {}
+
+/// #grHomeRun_8021E500
+
+/// #fn_8021E994
+
+void grHomeRun_8021EA30(f32* pos)
+{
+    f32 result;
+    f32 time;
+
+    time = Ground_801C0498();
+    result = *pos - 70.0F * (grHr_804D6AE4 * time);
+
+    time = Ground_801C0498();
+    result /= grHr_804D6AE4 * ((f32) grHr_804D6ADC * (160.0F * time));
+    result *= grHr_804D6AE0;
+
+    if (result < 0.0F) {
+        result = 0.0F;
+    }
+
+    if (lbLang_IsSavedLanguageUS()) {
+        result = (f32)(result * 0.304788);
+    }
+
+    stage_info.x6E0 = 100.0F * result;
+    PAD_STACK(8);
+}
+
+void grHomeRun_8021EAF8(void)
+{
+    stage_info.flags |= (1 << 7);
+}
+
+/// Copies the main camera into a target camera
+void fn_8021EB10(HSD_GObj* target_cam_gobj)
+{
+    HSD_GObj* main_cam_gobj;
+    HSD_CObj* main_cam_cobj;
+    HSD_CObj* target_cam_cobj;
+
+    f32 fov;
+    f32 aspect;
+    HSD_RectF32 viewport;
+    Scissor scissor;
+    Vec3 position;
+
+    target_cam_cobj = GET_COBJ(target_cam_gobj);
+    main_cam_gobj = Camera_80030A50();
+    if (main_cam_gobj) {
+        if ((main_cam_cobj = GET_COBJ(main_cam_gobj))) {
+            HSD_CObjSetFlags(target_cam_cobj, HSD_CObjGetFlags(main_cam_cobj));
+            HSD_CObjGetViewportf(main_cam_cobj, &viewport);
+            HSD_CObjSetViewportf(target_cam_cobj, &viewport);
+            HSD_CObjGetScissor(main_cam_cobj, &scissor);
+            HSD_CObjSetScissor(target_cam_cobj, &scissor);
+            target_cam_cobj->u = main_cam_cobj->u;
+            HSD_CObjSetNear(target_cam_cobj, HSD_CObjGetNear(main_cam_cobj));
+            HSD_CObjSetFar(target_cam_cobj, HSD_CObjGetFar(main_cam_cobj));
+
+            HSD_CObjGetPerspective(main_cam_cobj, &fov, &aspect);
+            HSD_CObjSetPerspective(target_cam_cobj, fov, aspect);
+            HSD_CObjGetEyePosition(main_cam_cobj, &position);
+            HSD_CObjSetEyePosition(target_cam_cobj, &position);
+            HSD_CObjGetInterest(main_cam_cobj, &position);
+            HSD_CObjSetInterest(target_cam_cobj, &position);
+        }
+    }
+    if (HSD_CObjSetCurrent(target_cam_cobj) != 0) {
+        HSD_FogSet(NULL);
+        HSD_GObj_80390ED0(target_cam_gobj, 7U);
+        HSD_CObjEndCurrent();
+    }
+}
+
+/// #grHomeRun_8021EC58
+
+void grHomeRun_8021ED74(void)
+{
+    BobOmbRain bobomb_rain;
+    HSD_JObj* jobj = Ground_801C2CF4(0x7F);
+    bobomb_rain.x0 = NULL;
+    bobomb_rain.x4 = NULL;
+    bobomb_rain.x14 = 0xB;
+    bobomb_rain.x18 = 0;
+    bobomb_rain.x1C.b0 = 1;
+    lb_8000B1CC(jobj, NULL, &bobomb_rain.x8_vec);
+    it_8026BE84(&bobomb_rain);
+}
+
+void grHomeRun_8021EDD4(int arg0)
+{
+    f32 scale;
+    f32 max_dist;
+    f32 ratio;
+    f32 num_ticks;
+    f32 dist;
+
+    if (lbLang_IsSavedLanguageJP()) {
+        scale = 0.1F;
+        max_dist = 50.0F;
+    } else {
+        scale = 0.3280969F;
+        max_dist = 100.0F;
+    }
+
+    ratio = max_dist / scale;
+    num_ticks = (int) (0.5F + ratio / (160.0F * Ground_801C0498()));
+
+    if (num_ticks < 1.0F) {
+        num_ticks = 1.0F;
+    }
+
+    dist = 160.0F * Ground_801C0498();
+    grHr_804D6AD8 = scale;
+    grHr_804D6AE0 = max_dist;
+    grHr_804D6ADC = num_ticks;
+    grHr_804D6AE4 = ratio / (num_ticks * dist);
+}
+
+DynamicsDesc* grHomeRun_8021EEB4(enum_t arg)
+{
+    return false;
+}
+
+bool grHomeRun_8021EEBC(Vec3* a, int b, HSD_JObj* jobj)
+{
+    Vec3 vec;
+    lb_8000B1CC(jobj, NULL, &vec);
+    if (a->y > vec.y) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+extern f32 grHr_804DBC94;
+
+f32 grHomeRun_8021EF10(void)
+{
+    return grHr_804DBC94 * Ground_801C0498();
+}

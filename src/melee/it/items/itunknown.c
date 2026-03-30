@@ -1,0 +1,154 @@
+#include "itunknown.h"
+
+#include "baselib/random.h"
+#include "ef/eflib.h"
+#include "gr/stage.h"
+#include "it/inlines.h"
+#include "it/it_26B1.h"
+#include "it/it_2725.h"
+#include "it/itCommonItems.h"
+#include "it/item.h"
+
+void it_802CE710(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    itUnknownAttributes* attr = ip->xC4_article_data->x4_specialAttributes;
+    it_80273318(gobj, attr->x24[HSD_Randi(26)]);
+    if (HSD_Randi(2) != 0) {
+        ip->xDD4_itemVar.unknown.x60 = 1.0F;
+    } else {
+        ip->xDD4_itemVar.unknown.x60 = -1.0F;
+    }
+    ip->xDD4_itemVar.unknown.x64 = 0;
+    ip->xDD4_itemVar.unknown.x68 = attr->x18;
+    ip->xDCC_flag.b3 = false;
+    ip->facing_dir = 0.0F;
+    it_80279CDC(gobj, attr->x0);
+    it_802CEC24(gobj);
+}
+
+void it_802CE7CC(Item_GObj* gobj) {}
+
+void it_802CE7D0(Item_GObj* gobj, Item_GObj* ref_gobj)
+{
+    it_8026B894(gobj, ref_gobj);
+}
+
+bool itUnknown_UnkMotion0_Anim(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    if (ip->pos.x > Stage_GetBlastZoneRightOffset() ||
+        ip->pos.x < Stage_GetBlastZoneLeftOffset() ||
+        ip->pos.y > Stage_GetBlastZoneTopOffset() ||
+        ip->pos.y < Stage_GetBlastZoneBottomOffset())
+    {
+        it_802CE8D0(gobj);
+    }
+    return false;
+}
+
+void itUnknown_UnkMotion0_Phys(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    itUnknownAttributes* attr = ip->xC4_article_data->x4_specialAttributes;
+    it_80272860(gobj, attr->xC, attr->x10);
+    ip->x40_vel.x += attr->x4 * ip->xDD4_itemVar.unknown.x60;
+}
+
+bool itUnknown_UnkMotion0_Coll(Item_GObj* gobj)
+{
+    return false;
+}
+
+/// #it_802CE8D0
+
+/// #itUnknown_UnkMotion1_Anim
+
+bool itUnknown_UnkMotion1_Anim(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    itUnknownAttributes* attr;
+    s32 temp;
+    s32 unused[2];
+
+    temp = ip->xDD4_itemVar.unknown.x64 - 1;
+    ip->xDD4_itemVar.unknown.x64 = temp;
+
+    if (temp < 0) {
+        it_802CED54(gobj);
+
+        temp = ip->xDD4_itemVar.unknown.x68 - 1;
+        ip->xDD4_itemVar.unknown.x68 = temp;
+
+        if (temp == 0) {
+            return true;
+        }
+
+        attr = ip->xC4_article_data->x4_specialAttributes;
+        ip->xDD4_itemVar.unknown.x64 = attr->x20 + HSD_Randi(attr->x1C);
+    }
+
+    return false;
+}
+
+void itUnknown_UnkMotion1_Phys(Item_GObj* gobj) {}
+
+bool itUnknown_UnkMotion1_Coll(Item_GObj* gobj)
+{
+    return false;
+}
+
+void it_802CEC24(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    it_802762BC(ip);
+    Item_80268E5C(gobj, 2, ITEM_ANIM_UPDATE);
+    ip->entered_hitlag = efLib_PauseAll;
+    ip->exited_hitlag = efLib_ResumeAll;
+}
+
+bool itUnknown_UnkMotion2_Anim(Item_GObj* gobj)
+{
+    it_80279FF8(gobj);
+    return false;
+}
+
+void itUnknown_UnkMotion2_Phys(Item_GObj* gobj) {}
+
+bool itUnknown_UnkMotion2_Coll(Item_GObj* gobj)
+{
+    return it_8027A118(gobj, it_802CE7CC);
+}
+
+/// #it_802CED54
+
+/// #it_2725_Logic38_Spawned
+
+void itUnknown_Logic38_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
+{
+    it_8026B894(gobj, ref_gobj);
+}
+
+void it_802CF0D4(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    Item_80268E5C(gobj, 0, ITEM_ANIM_UPDATE);
+    ip->entered_hitlag = efLib_PauseAll;
+    ip->exited_hitlag = efLib_ResumeAll;
+}
+
+bool it_802CF120(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    if (--ip->xD44_lifeTimer <= 0.0f) {
+        return true;
+    }
+    return false;
+}
+
+/// #it_802CF154
+
+bool it_802CF3D8(Item_GObj* gobj)
+{
+    return false;
+}
