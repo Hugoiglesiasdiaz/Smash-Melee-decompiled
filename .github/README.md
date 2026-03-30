@@ -251,3 +251,7 @@ So creating mods would be a lot easier as C code is much easier to consume than 
 Considering we don't have the source for the compiler, this is kind of "anything goes" territory. Unfortunately [register allocation is an NP-hard problem](https://en.wikipedia.org/wiki/Register_allocation?oldformat=true) which means there are all types of heuristics you can use to select registers, some of which can be confused by things as silly as variable names.
 
 One option is to attempt to automatically [permute the source code](https://github.com/simonlindholm/decomp-permuter) to get the correct register allocation.
+
+
+Credits & Legal:
+This project is based on the Melee Decompilation Project  https://github.com/doldecomp/melee?tab=readme-ov-file. All original game code and assets are property of Nintendo. This repository is for educational and research purposes only.
